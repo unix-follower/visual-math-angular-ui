@@ -1,9 +1,6 @@
 name: Build visual-math-angular-ui
 on:
   pull_request:
-    paths:
-      - .github/workflows/build-visual-math-angular-ui.yaml
-      - visual-math-angular-ui/**
     types:
       - opened
       - reopened
@@ -24,34 +21,29 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v6
         with:
-          node-version-file: visual-math-angular-ui/package.json
+          node-version-file: package.json
         
       - name: Install dependencies
         shell: bash
-        working-directory: visual-math-angular-ui
         run: npm ci
 
       - name: Check code formatting
         id: check_format
         continue-on-error: true
         shell: bash
-        working-directory: visual-math-angular-ui
         run: npm run check-format
 
       - name: Show format logs on check failure
         if: steps.check_format.outcome == 'failure'
         shell: bash
-        working-directory: visual-math-angular-ui
         run: |
           npm run format
           exit 1
 
       - name: Run ESLint
         shell: bash
-        working-directory: visual-math-angular-ui
         run: npm run lint
 
       - name: Build visual-math-angular-ui
         shell: bash
-        working-directory: visual-math-angular-ui
         run: npm run build
